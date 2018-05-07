@@ -2,3 +2,5 @@
 
 models/nearest/*
 models/predict/*
+
+settings.json
