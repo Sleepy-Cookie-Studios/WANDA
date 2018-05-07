@@ -9,6 +9,7 @@ import sys
 from gtts import gTTS
 import json
 from collections import defaultdict
+import webbrowser
 
  
 def speak(audioString):
@@ -49,7 +50,9 @@ def jarvis(data):
         data = data.split(" ")
         location = data[2]
         speak("Hold on Frank, I will show you where " + location + " is.")
-        os.system("chromium-browser https://www.google.nl/maps/place/" + location + "/&amp;")
+        # os.system("chromium-browser https://www.google.nl/maps/place/" + location + "/&amp;")
+        link = "https://www.google.nl/maps/place/" + location + "/&amp;"
+        webbrowser.open(link)
 
 def setup():
     settings = defaultdict(int)
