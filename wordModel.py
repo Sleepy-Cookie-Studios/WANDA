@@ -172,7 +172,7 @@ def makeWordModel():
 		# tf.nce_loss automatically draws a new sample of the negative labels each
 		# time we evaluate the loss.
 		# Explanation of the meaning of NCE loss:
-		#	http://mccormickml.com/2016/04/19/word2vec-tutorial-the-skip-gram-model/
+		#	http://mccormickml.com/2016/04/19/word2vec-tutorial-the-skip-gram-models/nearest/
 		with tf.name_scope('loss'):
 			loss = tf.reduce_mean(
 				tf.nn.nce_loss(
@@ -195,7 +195,6 @@ def makeWordModel():
 		normalized_embeddings = embeddings / norm
 		valid_embeddings = tf.nn.embedding_lookup(normalized_embeddings,valid_dataset)
 		similarity = tf.matmul(valid_embeddings, normalized_embeddings, transpose_b=True)
-		#emb = tf.Variable(normalized_embeddings, name="emb")
 
 		# Merge all summaries.
 		merged = tf.summary.merge_all()
@@ -243,9 +242,9 @@ def makeWordModel():
 				for i in xrange(valid_size):
 					valid_word = reverse_dictionary[valid_examples[i]]
 					top_k = 8	# number of nearest neighbors
-					nearest = (-sim[i,:]).argsort()[1:kn + 1]
+					nearest = (-sim[i,:]).argsort()[1:top_k + 1]
 					log_str = 'Nearest to %s:' % valid_word
-					for k in xrange(kn):
+					for k in xrange(top_k):
 						close_word = reverse_dictionary[nearest[k]]
 						log_str = '%s %s,' % (log_str, close_word)
 					print(log_str)
@@ -253,49 +252,23 @@ def makeWordModel():
 		save_obj(normalized_embeddings.eval(),'theGrail')
 		saver.save(session, os.path.join(path,'wordModel'))
 
-def loadWordModel():
-	# sess=tf.Session()		
-	# #First let's load meta graph and restore weights
-	# saver = tf.train.import_meta_graph('model/wordModel.meta')
-	# saver.restore(sess,tf.train.latest_checkpoint('./model/'))
-
-	# # Now, let's access and create placeholders variables and
-	# # create feed-dict to feed new data
-
-	# graph = tf.get_default_graph()
-	# # w1 = graph.get_tensor_by_name("w1:0")
-	# # w2 = graph.get_tensor_by_name("w2:0")
-	# # feed_dict ={w1:13.0,w2:17.0}
-
-	# # #Now, access the op that you want to run. 
-	# op = graph.get_tensor_by_name("emb:0")
-
-	# #print sess.run(op_to_restore,feed_dict)
-	# return sess.run(op)
-	# with tf.Session() as sess:
-	# 	saver = tf.train.import_meta_graph('model/wordModel.meta')
-	# 	saver.restore(sess,tf.train.latest_checkpoint('./model/'))
-	# 	return(sess.run('emb:0'))
-	pass
-
 def save_obj(obj, name):
-    with open('model/'+ name + '.pkl', 'wb') as f:
+    with open('models/nearest/'+ name + '.pkl', 'wb') as f:
         pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
 
 def load_obj(name):
-    with open('model/' + name + '.pkl', 'rb') as f:
+    with open('models/nearest/' + name + '.pkl', 'rb') as f:
         return pickle.load(f)
 
 if __name__ == '__main__':
 	global path
-	path = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])),'model')
+	path = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])),'models/nearest')
 
 	if not os.path.exists(os.path.join(path,'wordModel.index')):
 		makeWordModel()
 	dictionary = load_obj('metadata')
 	reverse_dictionary = dict(zip(dictionary.values(), dictionary.keys()))
 
-	#vecs = loadWordModel()
 	vecs = load_obj('theGrail')
 	
 	word = 'one'
