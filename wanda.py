@@ -66,6 +66,13 @@ def jarvis(data):
     elif "thank you" in data:
         speak("You are welcome! I'm just doing my job.")
 
+    elif "who are you" in data:
+        speak("I am your Wicked Artificial Naughty Deranged Assistant. You can call me Wanda.")
+
+    elif "what's your name" in data:
+        speak("I'm Wanda, your Wicked Artificial Naughty Deranged Assistant.")
+
+
     elif data != [None]:
         speak("Hmm, let me search that for you.")
         link = "https://www.google.com/search?q=" + data
