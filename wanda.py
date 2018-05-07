@@ -33,6 +33,7 @@ def recordAudio():
         data = r.recognize_google(audio)
         print("You said: " + data)
     except sr.UnknownValueError:
+        data = [None]
         print("Google Speech Recognition could not understand audio")
     except sr.RequestError as e:
         print("Could not request results from Google Speech Recognition service; {0}".format(e))
@@ -47,16 +48,20 @@ def jarvis(data):
         speak(ctime())
  
     if "where is" in data:
-        data = data.split(" ")
-        location = data[2]
-        speak("Hold on Frank, I will show you where " + location + " is.")
-        # os.system("chromium-browser https://www.google.nl/maps/place/" + location + "/&amp;")
-        link = "https://www.google.nl/maps/place/" + location + "/&amp;"
+        data = data.split("is")
+        location = data[1]
+        speak("Hold on " + settings['name'] + ", I will show you where " + location + " is.")
+        link = "https://www.google.com/maps/place/" + location + "/&amp;"
+        webbrowser.open(link)
+
+    elif data != [None]:
+        speak("Hmm, let me search that for you.")
+        link = "https://www.google.com/search?q=" + data
         webbrowser.open(link)
 
 def setup():
     settings = defaultdict(int)
-    speak("What is your name")
+    speak("What is your name?")
     while settings['name']==0:
         settings['name'] = recordAudio()
     with open(os.path.join(path,'settings.json'), 'w') as f:
