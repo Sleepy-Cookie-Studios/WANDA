@@ -2,7 +2,7 @@
 # Requires PyAudio and PySpeech.
  
 import speech_recognition as sr
-from time import ctime
+from time import strftime, localtime
 import time
 import os
 import sys
@@ -10,6 +10,7 @@ from gtts import gTTS
 import json
 from collections import defaultdict
 import webbrowser
+import urllib
 
  
 def speak(audioString):
@@ -42,22 +43,59 @@ def recordAudio():
  
 def jarvis(data):
     if "how are you" in data:
-        speak("I am fine")
+        speak("I am fine.")
  
-    if "what time is it" in data:
-        speak(ctime())
+    elif "what time is it" in data:
+        speak("It's " + strftime("%H:%M", localtime()))
+
+    elif "what is the date" in data:
+        speak("Today is "+ strftime("%A, %d %B %Y", localtime()))
  
-    if "where is" in data:
+    elif "where is" in data:
         data = data.split("is")
         location = data[1]
         speak("Hold on " + settings['name'] + ", I will show you where " + location + " is.")
         link = "https://www.google.com/maps/place/" + location + "/&amp;"
         webbrowser.open(link)
 
+    elif "who is" in data:
+        data = data.split("is")
+        person = data[1]
+        speak(knowledgegraph(person))
+    
+    elif "thank you" in data:
+        speak("You are welcome! I'm just doing my job.")
+
     elif data != [None]:
         speak("Hmm, let me search that for you.")
         link = "https://www.google.com/search?q=" + data
         webbrowser.open(link)
+
+def knowledgegraph(query):
+    API_KEY = "AIzaSyDxBZk1LpvBZ0as-ddQHvbQN6rwlT7AygY"
+    # api_key = open('.api_key').read()
+    api_key = API_KEY
+    service_url = 'https://kgsearch.googleapis.com/v1/entities:search'
+    params = {
+        'query': query,
+        'limit': 5,
+        'indent': True,
+        'key': api_key,
+    }
+    url = service_url + '?' + urllib.urlencode(params)
+    response = json.loads(urllib.urlopen(url).read())
+    # print(json.dumps(response, indent=2))
+
+    try:
+        text = response['itemListElement'][0]['result']['detailedDescription']['articleBody']
+        if text != "goog:detailedDescription" or text != None:
+            return text
+        else:
+            text = "I couldn't find any information."
+            return text
+    except:
+        text = "I couldn't find any information."
+        return text
 
 def setup():
     settings = defaultdict(int)
