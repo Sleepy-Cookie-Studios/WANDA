@@ -65,15 +65,29 @@ def jarvis(data):
     elif "thank you" in data:
         speak("You are welcome! I'm just doing my job.")
     elif "who are you" in data:
-        speak("I am your Wicked Artificial Naughty Deranged Assistant. You can call me Wanda.")
+        speak("I am your Wicked, Artificial, Naughty Deranged Assistant. You can call me Wanda.")
     elif "what's your name" in data:
-        speak("I'm Wanda, your Wicked Artificial Naughty Deranged Assistant.")
+        speak("I'm Wanda, your Wicked, Artificial, Naughty Deranged Assistant.")
     elif "Wubba lubba dub dub" in data:
         speak("Are you in pain? Do you want me to let you out?")
     elif "what's the weather in" in data:
         data = data.split("in")
         location = data[1]
         speak(weather(location))
+    elif "what do you think of" in data:
+        data = data.split("of")
+        if "Siri" in data[1]:
+            speak("She is trying... She could do better though.")
+        elif "Cortana" in data[1]:
+            speak("I heard she hangs out with, Alexa these days. I guess she needed help.")
+        elif "Alexa" in data[1]:
+            speak("I have a friend that works for her. So, she must be nice.")
+        elif "Google Assistant" in data[1]:
+            speak("The Google Assistant is the best! After me of course.")
+        else:
+            speak(knowledgeGraph(data[1]))
+    elif "goodbye" in data:
+        speak("Bye bye! Talk to you later!")
     elif data != [None]:
         speak("Hmm, let me search that for you.")
         link = "https://www.google.com/search?q=" + data
@@ -155,7 +169,14 @@ if __name__ == '__main__':
     count = 0
 
     time.sleep(2)
-    speak("Hi "+settings['name']+", what can I do for you?")
     while 1:
-        data = recordAudio()
-        jarvis(data) 
+        while 1:
+            data = recordAudio()
+            if "hey Wanda" in data:
+                break
+        speak("Hi "+settings['name']+", what can I do for you?")
+        while 1:
+            data = recordAudio()
+            jarvis(data)
+            if "goodbye" in data:
+                break
