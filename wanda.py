@@ -12,6 +12,9 @@ from collections import defaultdict
 import webbrowser
 import urllib
 
+from nextWord import loadPredicitonModel, generate_seq
+from wordModel import loadNearestModel, searchSimilar
+
  
 def speak(audioString):
     global count
@@ -164,9 +167,14 @@ if __name__ == '__main__':
         with open(os.path.join(path,'keys.json'), 'r') as f:
             global keys
             keys = json.load(f)
+    
     global count
-
     count = 0
+
+    predictor = loadPredicitonModel()
+    nearest = loadNearestModel()
+    #print(generate_seq(predictor,'Jack',4))
+    #print(searchSimilar(nearest,'one',5))
 
     time.sleep(2)
     while 1:

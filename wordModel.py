@@ -85,14 +85,6 @@ def generate_batch(batch_size, num_skips, skip_window):
 	data_index = (data_index + len(data) - span) % len(data)
 	return batch, labels
 
-def knn(sim,valid_word, kn):
-	nearest = (-sim).argsort()[1:kn + 1]
-	log_str = 'Nearest to %s:' % valid_word
-	for k in xrange(kn):
-		close_word = reverse_dictionary[nearest[k]]
-		log_str = '%s %s,' % (log_str, close_word)
-	print(log_str)
-
 def makeWordModel():
 	# Dowload files
 	url = 'http://mattmahoney.net/dc/'
@@ -260,7 +252,7 @@ def load_obj(name):
     with open('models/nearest/' + name + '.pkl', 'rb') as f:
         return pickle.load(f)
 
-if __name__ == '__main__':
+def loadNearestModel():
 	global path
 	path = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])),'models/nearest')
 
@@ -270,8 +262,17 @@ if __name__ == '__main__':
 	reverse_dictionary = dict(zip(dictionary.values(), dictionary.keys()))
 
 	vecs = load_obj('theGrail')
-	
-	word = 'one'
-	j = dictionary[word]
-	a = np.array(np.matmul(vecs[j,:],np.transpose(vecs)))
-	knn(a,word,5)
+	return vecs, dictionary, reverse_dictionary
+
+def searchSimilar(model, word, kn):
+	j=model[1][word]
+	a = np.array(np.matmul(model[0][j,:],np.transpose(model[0])))
+	nearest = (-a).argsort()[1:kn + 1]
+	close_word=list()
+	for k in nearest:
+		close_word.append(model[2][k])
+	return close_word
+
+if __name__ == '__main__':
+	model = loadNearestModel()
+	print(searchSimilar(model,'one',5))

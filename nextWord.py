@@ -13,7 +13,9 @@ from keras.utils.vis_utils import plot_model
 from keras.models import model_from_json
 
 # generate a sequence from the model
-def generate_seq(model, tokenizer, seed_text, n_words):
+def generate_seq(modelComp, seed_text, n_words):
+	model = modelComp[0]
+	tokenizer = modelComp[1]
 	in_text, result = seed_text, seed_text
 	# generate a fixed number of words
 	for _ in range(n_words):
@@ -80,7 +82,7 @@ def load_obj(name):
     with open('models/predict/' + name + '.pkl', 'rb') as f:
         return pickle.load(f)
 
-if __name__ == '__main__':
+def loadPredicitonModel():
 	global path
 	path = os.path.join(os.path.dirname(os.path.realpath(sys.argv[0])),'models/predict')
 
@@ -99,7 +101,11 @@ if __name__ == '__main__':
 	model = model_from_json(loaded_model_json)
 	# load weights into new model
 	model.load_weights("models/predict/model.h5")
-	tokenizer = load_obj('tokenizer')
+	tokenizer = load_obj('tokenizer')	
+	return model, tokenizer
 
-	print(generate_seq(model, tokenizer, 'Jack', 6))
-	print(generate_seq(model, tokenizer, 'Jill', 6))
+if __name__ == '__main__':
+	model = loadPredicitonModel()
+
+	print(generate_seq(model, 'Jack', 6))
+	print(generate_seq(model, 'Jill', 6))
