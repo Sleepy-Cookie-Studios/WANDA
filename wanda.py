@@ -87,9 +87,9 @@ def jarvis(data):
 
 def knowledgeGraph(query):
     global keys
-    api_key = keys['knowledgeGraph']
-    if not api_key in keys:
+    if not 'knowledgeGraph' in keys:
         return "Before I can help you with that, you need to provide me with some keys"
+    api_key = keys['knowledgeGraph']
     service_url = 'https://kgsearch.googleapis.com/v1/entities:search'
     params = {
         'query': query,
@@ -113,9 +113,9 @@ def knowledgeGraph(query):
 def weather(location):
     global keys
     service_url = "http://api.openweathermap.org/data/2.5/weather"
-    API_KEY = keys['weather']
-    if not API_KEY in keys:
+    if not 'weather' in keys:
         return "Before I can help you with that, you need to provide me with some keys"
+    API_KEY = keys['weather']
     params = {
         'q':location,
         'units':"metric",
@@ -123,7 +123,6 @@ def weather(location):
     }
     url = service_url + '?' + urllib.urlencode(params)
     response = json.loads(urllib.urlopen(url).read())
-    # print(json.dumps(response, indent=2))
     weather_desc = response['weather'][0]['description']
     weather_temp = response['main']['temp']
     text = "The weather in " + location + " shows " + weather_desc + " and a temperature of " + str(weather_temp) + " degrees Celsius."
