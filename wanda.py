@@ -14,6 +14,9 @@ import urllib
 
  
 def speak(audioString):
+    global count
+    if count<7:
+        count = 0
     print(audioString)
     tts = gTTS(text=audioString, lang='en')
     tts.save("audio.mp3")
@@ -42,6 +45,7 @@ def recordAudio():
     return data
  
 def jarvis(data):
+    global count
     if "how are you" in data:
         speak("I am fine.")
  
@@ -84,6 +88,13 @@ def jarvis(data):
         speak("Hmm, let me search that for you.")
         link = "https://www.google.com/search?q=" + data
         webbrowser.open(link)
+    else:
+        count=count+1
+        if count == 7:
+            speak("It seems like you fell and you might need some assistance, if you want me to be sure, dowload Still Standing on your phone")
+            link = "https://play.google.com/store/apps/details?id=com.sleepycookie.stillstanding"
+            webbrowser.open(link)
+
 
 def knowledgegraph(query):
     API_KEY = "AIzaSyDxBZk1LpvBZ0as-ddQHvbQN6rwlT7AygY"
@@ -144,6 +155,9 @@ if __name__ == '__main__':
         setup()
     with open(os.path.join(path,'settings.json'), 'r') as f:
         settings = json.load(f)
+    
+    global count
+    count = 0
 
     time.sleep(2)
     speak("Hi "+settings['name']+", what can I do for you?")
