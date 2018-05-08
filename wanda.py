@@ -48,42 +48,32 @@ def jarvis(data):
     global count
     if "how are you" in data:
         speak("I am up and running.")
- 
     elif "what time is it" in data:
         speak("It's " + strftime("%H:%M", localtime()))
-
     elif "what is the date" in data:
         speak("Today is "+ strftime("%A, %d %B %Y", localtime()))
- 
     elif "where is" in data:
         data = data.split("is")
         location = data[1]
         speak("Hold on " + settings['name'] + ", I will show you where " + location + " is.")
         link = "https://www.google.com/maps/place/" + location + "/&amp;"
         webbrowser.open(link)
-
     elif "who is" in data:
         data = data.split("is")
         person = data[1]
-        speak(knowledgegraph(person))
-    
+        speak(knowledgeGraph(person))
     elif "thank you" in data:
         speak("You are welcome! I'm just doing my job.")
-
     elif "who are you" in data:
         speak("I am your Wicked Artificial Naughty Deranged Assistant. You can call me Wanda.")
-
     elif "what's your name" in data:
         speak("I'm Wanda, your Wicked Artificial Naughty Deranged Assistant.")
-
     elif "Wubba lubba dub dub" in data:
         speak("Are you in pain? Do you want me to let you out?")
-
     elif "what's the weather in" in data:
         data = data.split("in")
         location = data[1]
         speak(weather(location))
-
     elif data != [None]:
         speak("Hmm, let me search that for you.")
         link = "https://www.google.com/search?q=" + data
@@ -95,11 +85,11 @@ def jarvis(data):
             link = "https://play.google.com/store/apps/details?id=com.sleepycookie.stillstanding"
             webbrowser.open(link)
 
-
-def knowledgegraph(query):
-    API_KEY = "AIzaSyDxBZk1LpvBZ0as-ddQHvbQN6rwlT7AygY"
-    # api_key = open('.api_key').read()
-    api_key = API_KEY
+def knowledgeGraph(query):
+    global keys
+    api_key = keys['knowledgeGraph']
+    if not api_key in keys:
+        return "Before I can help you with that, you need to provide me with some keys"
     service_url = 'https://kgsearch.googleapis.com/v1/entities:search'
     params = {
         'query': query,
@@ -109,7 +99,6 @@ def knowledgegraph(query):
     }
     url = service_url + '?' + urllib.urlencode(params)
     response = json.loads(urllib.urlopen(url).read())
-    # print(json.dumps(response, indent=2))
     try:
         text = response['itemListElement'][0]['result']['detailedDescription']['articleBody']
         if text != "goog:detailedDescription" or text != None:
@@ -122,8 +111,11 @@ def knowledgegraph(query):
         return text
 
 def weather(location):
+    global keys
     service_url = "http://api.openweathermap.org/data/2.5/weather"
-    API_KEY = "9dd41fb2c6345abf5cd3985cdc5951fc"
+    API_KEY = keys['weather']
+    if not API_KEY in keys:
+        return "Before I can help you with that, you need to provide me with some keys"
     params = {
         'q':location,
         'units':"metric",
@@ -155,7 +147,12 @@ if __name__ == '__main__':
     with open(os.path.join(path,'settings.json'), 'r') as f:
         settings = json.load(f)
     
+    if os.path.exists(os.path.join(path,'keys.json')):
+        with open(os.path.join(path,'keys.json'), 'r') as f:
+            global keys
+            keys = json.load(f)
     global count
+
     count = 0
 
     time.sleep(2)
