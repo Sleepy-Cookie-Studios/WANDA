@@ -72,7 +72,7 @@ def jarvis(data):
     elif "what's your name" in data:
         speak("I'm Wanda, your Wicked Artificial Naughty Deranged Assistant.")
 
-    elif "wubba lubba dub dub" in data:
+    elif "Wubba lubba dub dub" in data:
         speak("Are you in pain? Do you want me to let you out?")
 
     elif "what's the weather in" in data:
@@ -114,7 +114,6 @@ def knowledgegraph(query):
 def weather(location):
     service_url = "http://api.openweathermap.org/data/2.5/weather"
     API_KEY = "9dd41fb2c6345abf5cd3985cdc5951fc"
-
     params = {
         'q':location,
         'units':"metric",
