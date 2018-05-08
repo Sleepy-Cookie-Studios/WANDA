@@ -47,7 +47,7 @@ def recordAudio():
 def jarvis(data):
     global count
     if "how are you" in data:
-        speak("I am fine.")
+        speak("I am up and running.")
  
     elif "what time is it" in data:
         speak("It's " + strftime("%H:%M", localtime()))
@@ -110,7 +110,6 @@ def knowledgegraph(query):
     url = service_url + '?' + urllib.urlencode(params)
     response = json.loads(urllib.urlopen(url).read())
     # print(json.dumps(response, indent=2))
-
     try:
         text = response['itemListElement'][0]['result']['detailedDescription']['articleBody']
         if text != "goog:detailedDescription" or text != None:
