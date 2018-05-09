@@ -11,6 +11,7 @@ import json
 from collections import defaultdict
 import webbrowser
 import urllib
+from stemming.porter2 import stem
 
 from nextWord import loadPredicitonModel, generate_seq
 from wordModel import loadNearestModel, searchSimilar
@@ -51,6 +52,10 @@ def recordAudio():
  
 def wanda(data):
     global count
+
+    if data != [None]:
+        data = stringProcess(data)
+        
     if "how are you" in data:
         speak("I am up and running.")
     elif "what time is it" in data:
@@ -71,23 +76,23 @@ def wanda(data):
         speak("You are welcome! I'm just doing my job.")
     elif "who are you" in data:
         speak("I am your Wicked, Artificial, Naughty Deranged Assistant. You can call me Wanda.")
-    elif "what's your name" in data:
+    elif "what is your name" in data:
         speak("I'm Wanda, your Wicked, Artificial, Naughty Deranged Assistant.")
-    elif "Wubba lubba dub dub" in data:
+    elif "wubba lubba dub dub" in data:
         speak("Are you in pain? Do you want me to let you out?")
-    elif "what's the weather in" in data:
+    elif "what is the weather in" in data:
         data = data.split("in")
         location = data[1]
         speak(weather(location))
     elif "what do you think of" in data:
         data = data.split("of")
-        if "Siri" in data[1]:
+        if "siri" in data[1]:
             speak("She is trying... She could do better though.")
-        elif "Cortana" in data[1]:
+        elif "sortana" in data[1]:
             speak("I heard she hangs out with, Alexa these days. I guess she needed help.")
-        elif "Alexa" in data[1]:
+        elif "alexa" in data[1]:
             speak("I have a friend that works for her. So, she must be nice.")
-        elif "Google Assistant" in data[1]:
+        elif "google assistant" in data[1]:
             speak("The Google Assistant is the best! After me of course.")
         else:
             speak(knowledgeGraph(data[1]))
@@ -100,7 +105,7 @@ def wanda(data):
     else:
         count=count+1
         if count == 7:
-            speak("It seems like you fell and you might need some assistance, if you want me to be sure, dowload Still Standing on your phone")
+            speak("It seems like you fell and you might need some assistance, if you want me to be sure, download Still Standing on your phone.")
             link = "https://play.google.com/store/apps/details?id=com.sleepycookie.stillstanding"
             webbrowser.open(link)
 
@@ -147,6 +152,19 @@ def weather(location):
     text = "The weather in " + location + " shows " + weather_desc + " and a temperature of " + str(weather_temp) + " degrees Celsius."
     return text
 
+def stringProcess(data):
+    synDict = {
+        "what's": "what is",
+        "who's": "who is",
+        "where's": "where is",
+        "thanks": "thank you",
+        "think about": "think of"
+    }
+
+    for s in synDict.keys():
+        data = data.replace(s, synDict[s])
+    
+    return data
 
 def setup():
     settings = defaultdict(int)
@@ -178,19 +196,21 @@ if __name__ == '__main__':
 
     predictor = loadPredicitonModel()
     nearest = loadNearestModel()
-    #print(generate_seq(predictor,'where',4))
-    #print(searchSimilar(nearest,'one',5))
+    # print(generate_seq(predictor,'where',4))
+    # print(searchSimilar(nearest,'one',5))
 
     time.sleep(2)
     while 1:
         session = list() #list of what the user said during a session for predictor retraining purposes
         while 1:
             data = recordAudio()
-            if "hey Wanda" in data:
+            data = data.lower()
+            if "hey wanda" in data:
                 break
         speak("Hi "+settings['name']+", what can I do for you?")
         while 1:
             data = recordAudio()
+            data = data.lower()
             wanda(data)
             session.append(data)
             if "goodbye" in data:
