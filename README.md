@@ -2,4 +2,4 @@
 ## Wicked Artificial Naughty Deranged Assistant
 
 ### Set Up
-Run *zoara.sh* to create and train both the nearest word model and the next word prediction model
+Simply run *wanda.py* she will handle everything you need for the set up

@@ -5,6 +5,7 @@ import pickle
 from numpy import array
 from keras.preprocessing.text import Tokenizer
 from keras.utils import to_categorical
+from keras.preprocessing.sequence import pad_sequences
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import LSTM
@@ -16,13 +17,15 @@ from keras.models import model_from_json
 def generate_seq(modelComp, seed_text, n_words):
 	model = modelComp[0]
 	tokenizer = modelComp[1]
-	in_text, result = seed_text, seed_text
+	max_length = modelComp[2]
+	in_text = seed_text
 	# generate a fixed number of words
 	for _ in range(n_words):
 		# encode the text as integer
 		encoded = tokenizer.texts_to_sequences([in_text])[0]
-		encoded = array(encoded)
-		# predict a word in the vocabulary
+		# pre-pad sequences to a fixed length
+		encoded = pad_sequences([encoded], maxlen=max_length, padding='pre')
+		# predict probabilities for each word
 		yhat = model.predict_classes(encoded, verbose=0)
 		# map predicted word index to word
 		out_word = ''
@@ -31,32 +34,37 @@ def generate_seq(modelComp, seed_text, n_words):
 				out_word = word
 				break
 		# append to input
-		in_text, result = out_word, result + ' ' + out_word
-	return result
+		in_text += ' ' + out_word
+	return in_text
 
 def createPredictionModel(data):
 	# source text
 	# integer encode text
 	tokenizer = Tokenizer()
 	tokenizer.fit_on_texts([data])
-	encoded = tokenizer.texts_to_sequences([data])[0]
 	# determine the vocabulary size
 	vocab_size = len(tokenizer.word_index) + 1
 	print('Vocabulary Size: %d' % vocab_size)
 	# create word -> word sequences
 	sequences = list()
-	for i in range(1, len(encoded)):
-		sequence = encoded[i-1:i+1]
-		sequences.append(sequence)
+	for line in data.split('\n'):
+		encoded = tokenizer.texts_to_sequences([line])[0]
+		for i in range(1, len(encoded)):
+			sequence = encoded[:i+1]
+			sequences.append(sequence)
 	print('Total Sequences: %d' % len(sequences))
-	# split into X and y elements
+	# pad input sequences
+	max_length = max([len(seq) for seq in sequences])
+	sequences = pad_sequences(sequences, maxlen=max_length, padding='pre')
+	print('Max Sequence Length: %d' % max_length)
+	# split into input and output elements
 	sequences = array(sequences)
-	X, y = sequences[:,0],sequences[:,1]
+	X, y = sequences[:,:-1],sequences[:,-1]
 	# one hot encode outputs
 	y = to_categorical(y, num_classes=vocab_size)
 	# define model
 	model = Sequential()
-	model.add(Embedding(vocab_size, 10, input_length=1))
+	model.add(Embedding(vocab_size, 10, input_length=max_length-1))
 	model.add(LSTM(50))
 	# IMPORTANT!!
 	model.add(Dense(vocab_size, activation='softmax'))
@@ -73,6 +81,7 @@ def createPredictionModel(data):
 	# serialize weights to HDF5
 	model.save_weights("models/predict/model.h5")
 	save_obj(tokenizer,'tokenizer')
+	save_obj(max_length,'shame')
 
 def save_obj(obj, name):
     with open('models/predict/'+ name + '.pkl', 'wb') as f:
@@ -88,10 +97,8 @@ def loadPredicitonModel():
 
 	if not os.path.exists(os.path.join(path,'predictor.json')):
 	# source text
-		data = """ Jack and Jill went up the hill\n
-				 To fetch a pail of water\n
-				 Jack fell down and broke his crown\n
-				 And Jill came tumbling after\n """
+		with open('models/predict/data','r') as f:
+			data = f.read()
 		createPredictionModel(data)
 
 	# load json and create model
@@ -102,7 +109,8 @@ def loadPredicitonModel():
 	# load weights into new model
 	model.load_weights("models/predict/model.h5")
 	tokenizer = load_obj('tokenizer')	
-	return model, tokenizer
+	max_length = load_obj('shame')
+	return model, tokenizer, max_length-1
 
 if __name__ == '__main__':
 	model = loadPredicitonModel()

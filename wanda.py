@@ -15,6 +15,8 @@ import urllib
 from nextWord import loadPredicitonModel, generate_seq
 from wordModel import loadNearestModel, searchSimilar
 
+import subprocess
+
  
 def speak(audioString):
     global count
@@ -47,7 +49,7 @@ def recordAudio():
  
     return data
  
-def jarvis(data):
+def wanda(data):
     global count
     if "how are you" in data:
         speak("I am up and running.")
@@ -157,6 +159,8 @@ def setup():
 if __name__ == '__main__':
     # initialization
     path = os.path.dirname(os.path.realpath(sys.argv[0]))
+    global count
+    count = 0
 
     if not os.path.exists(os.path.join(path,'settings.json')):
         setup()
@@ -168,16 +172,18 @@ if __name__ == '__main__':
             global keys
             keys = json.load(f)
     
-    global count
-    count = 0
+    if not os.path.exists(os.path.join(path,'models/nearest/theGrail.pkl')):
+        speak('Setting up. Please wait. This may take a while')
+        os.system('./zoara.sh')
 
     predictor = loadPredicitonModel()
     nearest = loadNearestModel()
-    #print(generate_seq(predictor,'Jack',4))
+    #print(generate_seq(predictor,'where',4))
     #print(searchSimilar(nearest,'one',5))
 
     time.sleep(2)
     while 1:
+        session = list() #list of what the user said during a session for predictor retraining purposes
         while 1:
             data = recordAudio()
             if "hey Wanda" in data:
@@ -185,6 +191,9 @@ if __name__ == '__main__':
         speak("Hi "+settings['name']+", what can I do for you?")
         while 1:
             data = recordAudio()
-            jarvis(data)
+            wanda(data)
+            session.append(data)
             if "goodbye" in data:
                 break
+        session = [x for x in session if x != [None]]
+        print(session)

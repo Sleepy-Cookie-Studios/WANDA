@@ -2,6 +2,7 @@
 
 models/nearest/*
 models/predict/*
+!models/predict/data
 
 settings.json
 keys.json
