@@ -115,5 +115,5 @@ def loadPredicitonModel():
 if __name__ == '__main__':
 	model = loadPredicitonModel()
 
-	print(generate_seq(model, 'Jack', 6))
-	print(generate_seq(model, 'Jill', 6))
+	print(generate_seq(model, 'what', 3))
+	print(generate_seq(model, 'how', 3))

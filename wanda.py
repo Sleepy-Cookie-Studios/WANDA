@@ -15,9 +15,6 @@ from stemming.porter2 import stem
 
 from nextWord import loadPredicitonModel, generate_seq
 from wordModel import loadNearestModel, searchSimilar
-
-import subprocess
-
  
 def speak(audioString):
     global count
@@ -26,7 +23,7 @@ def speak(audioString):
     print(audioString)
     tts = gTTS(text=audioString, lang='en')
     tts.save("audio.mp3")
-    os.system("mpg321 audio.mp3")
+    os.system("mpg321 -q audio.mp3")
  
 def recordAudio():
     # Record Audio
@@ -47,15 +44,15 @@ def recordAudio():
         print("Google Speech Recognition could not understand audio")
     except sr.RequestError as e:
         print("Could not request results from Google Speech Recognition service; {0}".format(e))
- 
+
+    if data!=[None]:
+        data = stringProcess(data).lower()
+
     return data
  
 def wanda(data):
     global count
 
-    if data != [None]:
-        data = stringProcess(data)
-        
     if "how are you" in data:
         speak("I am up and running.")
     elif "what time is it" in data:
@@ -204,13 +201,11 @@ if __name__ == '__main__':
         session = list() #list of what the user said during a session for predictor retraining purposes
         while 1:
             data = recordAudio()
-            data = data.lower()
             if "hey wanda" in data:
                 break
         speak("Hi "+settings['name']+", what can I do for you?")
         while 1:
             data = recordAudio()
-            data = data.lower()
             wanda(data)
             session.append(data)
             if "goodbye" in data:
