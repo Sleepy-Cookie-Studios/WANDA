@@ -14,7 +14,7 @@ from keras.utils.vis_utils import plot_model
 from keras.models import model_from_json
 
 # generate a sequence from the model
-def generate_seq(modelComp, seed_text, n_words):
+def generateSeq(modelComp, seed_text, n_words):
 	model = modelComp[0]
 	tokenizer = modelComp[1]
 	max_length = modelComp[2]
@@ -35,7 +35,7 @@ def generate_seq(modelComp, seed_text, n_words):
 				break
 		# append to input
 		in_text += ' ' + out_word
-	return in_text
+	return out_word
 
 def createPredictionModel(data):
 	# source text
@@ -115,5 +115,5 @@ def loadPredicitonModel():
 if __name__ == '__main__':
 	model = loadPredicitonModel()
 
-	print(generate_seq(model, 'what', 3))
-	print(generate_seq(model, 'how', 3))
+	print(generateSeq(model, 'what is the weather in', 1))
+	print(generateSeq(model, 'how', 3))
