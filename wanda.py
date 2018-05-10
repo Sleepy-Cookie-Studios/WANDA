@@ -146,7 +146,7 @@ def weather(location):
     response = json.loads(urllib.urlopen(url).read())
     weather_desc = response['weather'][0]['description']
     weather_temp = response['main']['temp']
-    text = "The weather in " + location + " shows " + weather_desc + " and a temperature of " + str(weather_temp) + " degrees Celsius."
+    text = "The weather in" + location.title() + " shows " + weather_desc + " and a temperature of " + str(weather_temp) + " degrees Celsius."
     return text
 
 def stringProcess(data):
