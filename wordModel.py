@@ -265,6 +265,9 @@ def loadNearestModel():
 	return vecs, dictionary, reverse_dictionary
 
 def searchSimilar(model, word, kn):
+	#model 0 -> vecs, 1 -> dictionary, 2 -> reverseDictionary
+	if word not in model[1]:
+		return None
 	j=model[1][word]
 	a = np.array(np.matmul(model[0][j,:],np.transpose(model[0])))
 	nearest = (-a).argsort()[1:kn + 1]

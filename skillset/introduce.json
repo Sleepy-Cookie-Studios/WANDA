@@ -1,0 +1,7 @@
+{
+	"id":11,
+	"trigger":["what is your name"],
+	"responseType":"text",
+	"response":["I'm Wanda, your Wicked, Artificial, Naughty Deranged Assistant"],
+	"arguments":[null]
+}

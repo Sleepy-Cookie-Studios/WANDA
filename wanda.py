@@ -24,34 +24,35 @@ def setup():
         json.dump(settings, f)
 
 def setupSkills(path):
-    knownSkillsNames=['howAreYou','time','date','place','who','thanks','identify','rick','weather','opinions','goodbye']
+    knownSkillsNames=['howAreYou','time','date','place','who','thanks','identify','rick','weather','opinions','goodbye','introduce']
     knownSkills = list()
     for skill in knownSkillsNames:
         with open(os.path.join(path,skill+'.json'), 'r') as f:
             knownSkills.append(json.load(f))
     return knownSkills
 
-def wandaV2(data, knownSKills):
-    for skill in knownSKills:
-        thingy = (e in data for e in skill['trigger'])
+def wandaV2(data, knownSkills, method):
+    for skill in knownSkills:
+        thingy = (e in data for e in skill[method])
         if any(thingy):
-            i=0
-            while not next(thingy):
-                i+=1
             if skill['responseType']=='text':
-                utils.speak(skill['response'][i])
+                utils.speak(skill['response'][0])
             else:
                 args = list()
                 for argument in skill['arguments']:
                     if argument==None:
                         break
                     args.append(eval(argument))
-                utils.speak(getattr(utils , skill['response'][i])(args))
+                utils.speak(getattr(utils , skill['response'][0])(args))
             return
     if data != [None]:
-        utils.speak(utils.default([data]))
+        if method=='trigger':                
+            wandaV2(data,knownSkills, 'extendedTrigger')
+        else:
+            utils.speak(utils.default([data]))
     else:
         utils.stillStanding()
+
 
 
 if __name__ == '__main__':
@@ -76,13 +77,27 @@ if __name__ == '__main__':
         os.system('./zoara.sh')
 
     global predictor
-
     predictor = loadPredicitonModel()
+
+    global nearest
     nearest = loadNearestModel()
-    # print(generateSeq(predictor,'where',4))
-    # print(searchSimilar(nearest,'one',5))
+    nearestDepth = 1
 
     skills = setupSkills(os.path.join(path,'skillset'))
+
+    for skill in skills:
+        newTriggers = list()
+        for trigger in skill['trigger']:
+            words = trigger.split(' ')
+            for word in words:
+                newWord = searchSimilar(nearest,word,nearestDepth)
+                if newWord is None:
+                    continue
+                newTriggers.append(trigger.replace(word,''.join(newWord)))
+        skill['extendedTrigger'] = newTriggers
+        #print(skill['extendedTrigger'])
+
+    closure = ['goodbye',''.join(searchSimilar(nearest,'goodbye',nearestDepth))]
 
     time.sleep(2)
     while 1:
@@ -94,9 +109,9 @@ if __name__ == '__main__':
         utils.speak("Hi "+settings['name']+", what can I do for you?")
         while 1:
             data = utils.recordAudio()
-            wandaV2(data, skills)
+            wandaV2(data, skills, 'trigger')
             session.append(data)
-            if "goodbye" in data:
+            if any(e in data for e in closure):
                 break
         session = [x for x in session if x != [None]]
         print(session)

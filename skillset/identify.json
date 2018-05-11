@@ -1,8 +1,7 @@
 {
 	"id":6,
-	"trigger":["who are you","what is your name"],
+	"trigger":["who are you"],
 	"responseType":"text",
-	"response":["I am your Wicked, Artificial, Naughty Deranged Assistant. You can call me Wanda",
-		"I'm Wanda, your Wicked, Artificial, Naughty Deranged Assistant"],
+	"response":["I am your Wicked, Artificial, Naughty Deranged Assistant. You can call me Wanda"],
 	"arguments":[null]
 }
