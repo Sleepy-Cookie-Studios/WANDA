@@ -1,0 +1,7 @@
+{
+	"id":2,
+	"trigger":["what is the date"],
+	"responseType":"function",
+	"response":["getDate"],
+	"arguments":[null]
+}

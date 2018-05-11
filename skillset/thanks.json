@@ -1,0 +1,7 @@
+{
+	"id":5,
+	"trigger":["thank you"],
+	"responseType":"text",
+	"response":["You are welcome! I'm just doing my job."],
+	"arguments":[null]
+}

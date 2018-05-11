@@ -1,0 +1,7 @@
+{
+	"id":7,
+	"trigger":["wubba lubba dub dub"],
+	"responseType":"text",
+	"response":["Are you in pain? Do you want me to let you out?"],
+	"arguments":[null]
+}

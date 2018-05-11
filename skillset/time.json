@@ -1,0 +1,7 @@
+{
+	"id":1,
+	"trigger":["what time is it"],
+	"responseType":"function",
+	"response":["getTime"],
+	"arguments":[null]
+}

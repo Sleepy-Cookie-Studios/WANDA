@@ -1,14 +1,21 @@
 import speech_recognition as sr
+from time import strftime, localtime
 from gtts import gTTS
 import os
 import urllib
 import json
+import webbrowser
 
-def knowledgeGraph(query, key):
-    if key == 0:
+from nextWord import generateSeq
+
+def knowledgeGraph(args):
+    #args 0 -> data, 1 -> key, 2 -> predictor
+    if args[1] == 0:
         return "Before I can help you with that, you need to provide me with some keys"
 
-    api_key = key
+    query = args[0].split("is")[1]
+
+    api_key = args[1]
     service_url = 'https://kgsearch.googleapis.com/v1/entities:search'
     params = {
         'query': query,
@@ -29,12 +36,17 @@ def knowledgeGraph(query, key):
         text = "I couldn't find any information."
         return text
 
-def weather(location, key):
-    if key == 0:
+def weather(args):
+    #args 0 -> data, 1 -> key, 2 -> predictor
+
+    if args[1] == 0:
         return "Before I can help you with that, you need to provide me with some keys"
-    
+    data = args[0].split("in")
+    location = data[1]
+    if location == '':
+        location=generateSeq(args[2],"what is the weather in",1)
     service_url = "http://api.openweathermap.org/data/2.5/weather"
-    API_KEY = key
+    API_KEY = args[1]
     params = {
         'q':location,
         'units':"metric",
@@ -44,7 +56,7 @@ def weather(location, key):
     response = json.loads(urllib.urlopen(url).read())
     weather_desc = response['weather'][0]['description']
     weather_temp = response['main']['temp']
-    text = "The weather in " + location + " shows " + weather_desc + " and a temperature of " + str(weather_temp) + " degrees Celsius."
+    text = "The weather in " + location.title() + " shows " + weather_desc + " and a temperature of " + str(weather_temp) + " degrees Celsius."
     return text
 
 def stringProcess(data):
@@ -60,6 +72,42 @@ def stringProcess(data):
         data = data.replace(s, synDict[s])
     
     return data
+
+def getTime(args):
+    return "It's " + strftime("%H:%M", localtime())
+def getDate(args):
+    return "Today is "+ strftime("%A, %d %B %Y", localtime())
+def getPlace(args):
+    #args 0 -> data, 1 -> settings
+    data = args[0].split("is")
+    location = data[1]
+    link = "https://www.google.com/maps/place/" + location + "/&amp;"
+    webbrowser.open(link)
+    return("Hold on " + args[1]['name'] + ", I will show you where " + location + " is.")
+def opinion(args):
+    #args 0 -> data, 1 -> key
+    data = args[0].split("of")
+    if "siri" in data[1]:
+        return "She is trying... She could do better though."
+    elif "cortana" in data[1]:
+        return "I heard she hangs out with, Alexa these days. I guess she needed help."
+    elif "alexa" in data[1]:
+        return "I have a friend that works for her. So, she must be nice."
+    elif "google assistant" in data[1]:
+        return "The Google Assistant is the best! After me of course."
+    else:
+        return knowledgeGraph(["is "+data[1],args[1]])
+def stillStanding():
+    global count
+    count+=1
+    if count == 7:
+        link = "https://play.google.com/store/apps/details?id=com.sleepycookie.stillstanding"
+        webbrowser.open(link)
+        speak("It seems like you fell and you might need some assistance, if you want me to be sure, download Still Standing on your phone.")
+def default(args):
+    link = "https://www.google.com/search?q=" + args[0]
+    webbrowser.open(link)
+    return "Hmm, let me search that for you."
 
 def speak(audioString):
     global count

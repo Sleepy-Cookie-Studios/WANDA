@@ -1,0 +1,7 @@
+{
+	"id":4,
+	"trigger":["who is"],
+	"responseType":"function",
+	"response":["knowledgeGraph"],
+	"arguments":["data","keys['knowledgeGraph']","predictor"]
+}
