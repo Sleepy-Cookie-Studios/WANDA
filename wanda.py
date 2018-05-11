@@ -16,9 +16,9 @@ from wordModel import loadNearestModel, searchSimilar
 import utils
 
 def setup():
-    settings = defaultdict(int)
+    settings = defaultdict(lambda:[None])
     utils.speak("What is your name?")
-    while settings['name']==0:
+    while settings['name'] == [None]:
         settings['name'] = utils.recordAudio()
     with open(os.path.join(path,'settings.json'), 'w') as f:
         json.dump(settings, f)
