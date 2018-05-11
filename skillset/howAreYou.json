@@ -1,7 +1,0 @@
-{
-	"id":0,
-	"trigger":["how are you"],
-	"responseType":"text",
-	"response":["I am up and running"],
-	"arguments":[null]
-}

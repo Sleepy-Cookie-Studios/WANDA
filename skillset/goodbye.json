@@ -1,7 +1,0 @@
-{
-	"id":10,
-	"trigger":["goodbye"],
-	"responseType":"text",
-	"response":["Bye bye! Talk to you later!"],
-	"arguments":[null]
-}

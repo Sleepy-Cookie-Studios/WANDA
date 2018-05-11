@@ -1,7 +1,0 @@
-{
-	"id":9,
-	"trigger":["what do you think of"],
-	"responseType":"function",
-	"response":["opinion"],
-	"arguments":["data","keys['knowledgeGraph']","predictor"]
-}

@@ -1,7 +1,0 @@
-{
-	"id":8,
-	"trigger":["what is the weather in"],
-	"responseType":"function",
-	"response":["weather"],
-	"arguments":["data","keys['weather']","predictor"]
-}
