@@ -8,7 +8,9 @@ import sys
 import json
 from collections import defaultdict
 import webbrowser
-from stemming.porter2 import stem
+import re
+import glob
+#from stemming.porter2 import stem
 
 from nextWord import loadPredicitonModel, generateSeq
 from wordModel import loadNearestModel, searchSimilar
@@ -24,10 +26,10 @@ def setup():
         json.dump(settings, f)
 
 def setupSkills(path):
-    knownSkillsNames=['howAreYou','time','date','place','who','thanks','identify','rick','weather','opinions','goodbye','introduce']
     knownSkills = list()
-    for skill in knownSkillsNames:
-        with open(os.path.join(path,skill+'.json'), 'r') as f:
+    #cycle through all the .json files in path directory
+    for skill in glob.glob(os.path.join(path,'*.json')):
+        with open(os.path.join(path,skill), 'r') as f:
             knownSkills.append(json.load(f))
     return knownSkills
 
@@ -52,8 +54,6 @@ def wandaV2(data, knownSkills, method):
             utils.speak(utils.default([data]))
     else:
         utils.stillStanding()
-
-
 
 if __name__ == '__main__':
     # initialization
@@ -93,11 +93,12 @@ if __name__ == '__main__':
                 newWord = searchSimilar(nearest,word,nearestDepth)
                 if newWord is None:
                     continue
-                newTriggers.append(trigger.replace(word,''.join(newWord)))
+                #need to replace only exact word in the string e.x the->their not weaTHEr->weaTHEIRr
+                newTriggers.append(re.sub(r'\b'+word+r'\b',''.join(newWord),trigger)) 
         skill['extendedTrigger'] = newTriggers
-        #print(skill['extendedTrigger'])
+        print(skill['extendedTrigger'])
 
-    closure = ['goodbye',''.join(searchSimilar(nearest,'goodbye',nearestDepth))]
+    closure = ['goodbye']
 
     time.sleep(2)
     while 1:

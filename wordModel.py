@@ -143,7 +143,7 @@ def makeWordModel():
 			train_labels = tf.placeholder(tf.int32, shape=[batch_size, 1])
 			valid_dataset = tf.constant(valid_examples, dtype=tf.int32)
 
-			# Ops and variables pinned to the CPU because of missing GPU implementation
+		# Ops and variables pinned to the CPU because of missing GPU implementation
 		with tf.device('/cpu:0'):
 			# Look up embeddings for inputs.
 			with tf.name_scope('embeddings'):
@@ -273,9 +273,12 @@ def searchSimilar(model, word, kn):
 	nearest = (-a).argsort()[1:kn + 1]
 	close_word=list()
 	for k in nearest:
+		if a[k]<0.6:
+			break
 		close_word.append(model[2][k])
+	if close_word==[]: return None
 	return close_word
 
 if __name__ == '__main__':
 	model = loadNearestModel()
-	print(searchSimilar(model,'one',5))
+	print(searchSimilar(model,'about',5))
