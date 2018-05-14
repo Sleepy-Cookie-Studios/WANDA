@@ -15,6 +15,12 @@ def knowledgeGraph(args):
 
     query = args[0].split("is")[1]
 
+    if query == '':
+        speak("I couldn't hear who you are talking about. Please repeat the name")
+        query=[None]
+        while query == [None]:
+            query=recordAudio()
+
     api_key = args[1]
     service_url = 'https://kgsearch.googleapis.com/v1/entities:search'
     params = {
@@ -43,8 +49,13 @@ def weather(args):
         return "Before I can help you with that, you need to provide me with some keys"
     data = args[0].split("in")
     location = data[1]
+
     if location == '':
-        location=generateSeq(args[2],"what is the weather in",1)
+        speak("I couldn't hear the location you where interested about. Please repeat the location")
+        location=[None]
+        while location == [None]:
+            location=recordAudio()
+
     service_url = "http://api.openweathermap.org/data/2.5/weather"
     API_KEY = args[1]
     params = {
