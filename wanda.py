@@ -90,11 +90,12 @@ if __name__ == '__main__':
         for trigger in skill['trigger']:
             words = trigger.split(' ')
             for word in words:
-                newWord = searchSimilar(nearest,word,nearestDepth)
-                if newWord is None:
+                newWords = searchSimilar(nearest,word,nearestDepth)
+                if newWords is None:
                     continue
-                #need to replace only exact word in the string e.x the->their not weaTHEr->weaTHEIRr
-                newTriggers.append(re.sub(r'\b'+word+r'\b',''.join(newWord),trigger)) 
+                for newWord in newWords:
+                    #need to replace only exact word in the string e.x the->their not weaTHEr->weaTHEIRr
+                    newTriggers.append(re.sub(r'\b'+word+r'\b',''.join(newWord),trigger)) 
         skill['extendedTrigger'] = newTriggers
         print(skill['extendedTrigger'])
 

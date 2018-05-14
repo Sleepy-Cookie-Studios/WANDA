@@ -273,7 +273,7 @@ def searchSimilar(model, word, kn):
 	nearest = (-a).argsort()[1:kn + 1]
 	close_word=list()
 	for k in nearest:
-		if a[k]<0.6:
+		if a[k]<0.615:
 			break
 		close_word.append(model[2][k])
 	if close_word==[]: return None
@@ -281,4 +281,4 @@ def searchSimilar(model, word, kn):
 
 if __name__ == '__main__':
 	model = loadNearestModel()
-	print(searchSimilar(model,'about',5))
+	print(searchSimilar(model,'is',5))
