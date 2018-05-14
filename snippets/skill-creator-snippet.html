@@ -1,5 +1,5 @@
 <h1>Skill Creator</h1>
-<div class="col-md-12">
+<div class="col-md-6">
 	ID:<br>
 	<input class="blackBack" id="id" type="text" size="3"><br>
 
@@ -19,7 +19,40 @@
 	Arguments:<br>
 	<input class="blackBack" id="args" type="text" size="25"><br>
 
-	<a onclick="$lb.downloadJson();">Submit</a>
+	<div class="button"><a onclick="$lb.downloadJson();">Create & Download</a></div>
 
 	<a id="downloader"></a>
+</div>
+
+<div class="container col-md-6">
+	<table>
+		<tr>
+			<th>Function</th>
+			<th>Arguments</th>
+		</tr>
+		<tr>
+			<td>getDate</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>opinion</td>
+			<td>data, keys['knowledgeGraph'], predictor</td>
+		</tr>
+		<tr>
+			<td>getPlace</td>
+			<td>data, settings</td>
+		</tr>
+		<tr>
+			<td>getTime</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td>weather</td>
+			<td>data, keys['weather'], predictor</td>
+		</tr>
+		<tr>
+			<td>knowledgeGraph</td>
+			<td>data, keys['knowledgeGraph'], predictor</td>
+		</tr>		
+	</table>
 </div>

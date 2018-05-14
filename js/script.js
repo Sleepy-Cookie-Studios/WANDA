@@ -110,14 +110,21 @@ lb.downloadJson = function(){
   if (document.querySelector("#responseType").checked){responseType="text";}
   else{responseType="function";}
   var response = document.querySelector("#response").value;
-  var args = document.querySelector("#args").value;
-
+  var argument = document.querySelector("#args").value;
+  var args = new Array();
+  argument = argument.replace(/,/g," ").split(/ /g);
+  for(var i =0; i<argument.length; i++){
+    if(argument[i]){
+      args.push(argument[i]);
+    }
+  }
+  
   a = {
-    "id":id,
+    "id":parseInt(id),
     "trigger":[trigger],
     "responseType":responseType,
     "response":[response],
-    "arguments":[args]
+    "arguments":args
   };
 
   name = document.querySelector("#name").value + ".json";

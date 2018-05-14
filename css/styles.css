@@ -105,6 +105,17 @@ input{
   border: none; 
 }
 
+table, th, td{
+  padding:5px;
+  border: 1px solid #fff;
+  text-align: center;
+}
+
+.button{
+  margin-top: 7px;
+  font-size: 1.2em;
+}
+
 /********** Large devices only **********/
 @media (min-width: 1200px) {}
 
