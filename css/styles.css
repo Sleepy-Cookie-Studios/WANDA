@@ -99,6 +99,12 @@ body {
   width: 50%;
 }
 /* END HOME PAGE */
+
+input{
+  background-color:#2A2B2D;
+  border: none; 
+}
+
 /********** Large devices only **********/
 @media (min-width: 1200px) {}
 

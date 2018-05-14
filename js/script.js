@@ -15,6 +15,7 @@ var lb = {};
 
 var homeHtmlUrl = "snippets/home-snippet.html";
 var aboutHtml = "snippets/about-snippet.html";
+var skillCreatorHtml = "snippets/skill-creator-snippet.html"
 var type;
 
 // Convenience function for inserting innerHTML for 'select'
@@ -41,8 +42,13 @@ var switchMenuToActive = function (buttonIndex) {
   classes = classes.replace(new RegExp("active", "g"), "");
   document.querySelector("#navMenuAboutButton").className = classes;
 
+  var classes = document.querySelector("#navMenuSkillButton").className;
+  classes = classes.replace(new RegExp("active", "g"), "");
+  document.querySelector("#navMenuAboutButton").className = classes;
+
   var menuSelector;
   if (buttonIndex==1){menuSelector="#navMenuAboutButton";}
+  else if (buttonIndex==2){menuSelector="#navMenuSkillButton";}
   // Add 'active' to menu button if not already there
   classes = document.querySelector(menuSelector).className;
   if (classes.indexOf("active") == -1) {
@@ -86,6 +92,42 @@ lb.loadAboutPage = function () {
        insertHtml("#main-content",aboutHtml);
     },false);
 };
+
+lb.loadSkillCreatorPage = function () {
+  showLoading("#main-content");
+  switchMenuToActive(2);
+  $ajaxUtils.sendGetRequest(
+    skillCreatorHtml,
+    function(skillCreatorHtml){
+       insertHtml("#main-content",skillCreatorHtml);
+    },false);
+};
+
+lb.downloadJson = function(){
+  var id = document.querySelector("#id").value;
+  var trigger = document.querySelector("#trigger").value;
+  var responseType;
+  if (document.querySelector("#responseType").checked){responseType="text";}
+  else{responseType="function";}
+  var response = document.querySelector("#response").value;
+  var args = document.querySelector("#args").value;
+
+  a = {
+    "id":id,
+    "trigger":[trigger],
+    "responseType":responseType,
+    "response":[response],
+    "arguments":[args]
+  };
+
+  name = document.querySelector("#name").value + ".json";
+
+  skill = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(a));
+  var downloader = document.querySelector("#downloader");
+  downloader.setAttribute("href",skill);
+  downloader.setAttribute("download",name);
+  downloader.click();
+}
 
 global.$lb = lb;
 

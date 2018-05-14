@@ -1,0 +1,25 @@
+<h1>Skill Creator</h1>
+<div class="col-md-12">
+	ID:<br>
+	<input class="blackBack" id="id" type="text" size="3"><br>
+
+	Skill Name:<br>
+	<input class="blackBack" id="name" type="text" size="15" placeholder="Don't forget me"><br>
+
+	Trigger:<br>
+	<input class="blackBack" id="trigger" type="text" size="50"><br>
+
+	Response Type:<br>
+	<input id = "responseType" type="radio" name="responseType" checked> Text<br>
+	<input type="radio" name="responseType"> Function<br>
+
+	Response:<br>
+	<input class="blackBack" id="response" type="text" size="50"><br>
+
+	Arguments:<br>
+	<input class="blackBack" id="args" type="text" size="25"><br>
+
+	<a onclick="$lb.downloadJson();">Submit</a>
+
+	<a id="downloader"></a>
+</div>
