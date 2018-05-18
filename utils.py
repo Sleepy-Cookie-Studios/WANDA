@@ -51,7 +51,7 @@ def weather(args):
     location = data[1]
 
     if location == '':
-        speak("I couldn't hear the location you where interested about. Please repeat the location")
+        speak("Sure! What's the location, again?")
         location=[None]
         while location == [None]:
             location=recordAudio()
