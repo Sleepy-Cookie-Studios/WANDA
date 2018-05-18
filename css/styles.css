@@ -42,11 +42,13 @@ body {
 #nav-list a {
   color: #fff ;
   text-align: center;
-}
-#nav-list a:hover {
-  background: #1973BE;
   border-radius: 25px;
-
+}
+#nav-list a:hover{
+  background: #1973BE;
+}
+.navbar-default .navbar-nav>.active>a, #nav-list a:focus{
+  background: #46A0EB;
 }
 #nav-list a span {
   font-size: 1.8em;

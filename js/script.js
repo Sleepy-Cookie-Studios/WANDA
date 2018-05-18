@@ -44,7 +44,7 @@ var switchMenuToActive = function (buttonIndex) {
 
   var classes = document.querySelector("#navMenuSkillButton").className;
   classes = classes.replace(new RegExp("active", "g"), "");
-  document.querySelector("#navMenuAboutButton").className = classes;
+  document.querySelector("#navMenuSkillButton").className = classes;
 
   var menuSelector;
   if (buttonIndex==1){menuSelector="#navMenuAboutButton";}
