@@ -1,0 +1,7 @@
+{
+    "id":12,
+    "trigger":["who made you"],
+    "responseType":"text",
+    "response":["I was made with love in a lab by Sleepy Cookie Studios."],
+    "arguments":[]
+}
