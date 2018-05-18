@@ -1,19 +1,19 @@
 body {
   font-size: 16px;
-  color: #fff;
-  background-color: #1973BE ;
+  color: #222;
+  background-color: #f0f0f0 ;
   font-family: 'Oxygen', sans-serif;
 }
 
 /* HEADER */
 #header-nav {
-  background-color: #2A2B2D;
+  background-color: #222;
   border-radius: 0;
   border: 0;
 }
 
 #logo-img {
-  background: url('../images/logo.png') no-repeat;
+  background: url('../images/logo/wanda-01.png') no-repeat;
   width: 90px;
   height: 90px;
   margin: 10px 5px 10px 0;
@@ -27,9 +27,8 @@ body {
   font-family: 'Oxygen', sans-serif;
   color: #fff;
   font-size: 1.5em;
-  text-transform: uppercase;
-  font-weight: bold;
-  text-shadow: 1px 1px 1px #222;
+  text-transform: lowercase;
+  font-weight: normal;
   margin-bottom: 0;
   line-height: .75;
 }
@@ -63,7 +62,7 @@ body {
 /* END HEADER */
 
 #main-content a, #main-content a:focus{
-  color: #fff;
+  color: #99ff66;
   text-decoration: underline;
 }
 #main-content a:hover{
@@ -79,6 +78,7 @@ body {
   border-top: 0;
   line-height: .8;
   font-size: 0.8em;
+  color: #fff;
 }
 .panel-footer section{
   margin-top: 15px;  
@@ -98,14 +98,38 @@ body {
 
 .center{
   display: block;
+  margin-top: 5%;
   margin-left: auto;
   margin-right: auto;
-  width: 50%;
+  width: 70%;
+  border-radius: 5px;
+}
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  background-color: #009cd4;
+  color: #fff;
+  transition: 0.3s;
+  padding: 16px 16px;
+  font-size: 18px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  text-align: justify;
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.zero_padding_container{
+  padding: 0px;
+  text-align: justify;
 }
 /* END HOME PAGE */
 
 input{
-  background-color:#2A2B2D;
+  background-color:#fff;
   border: none; 
 }
 
