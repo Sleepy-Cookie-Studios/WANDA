@@ -128,10 +128,12 @@ body {
 }
 /* END HOME PAGE */
 
+/*SKill Creator*/
+/*
 input{
   background-color:#fff;
   border: none; 
-}
+}*/
 
 table, th, td{
   padding:5px;
@@ -139,10 +141,13 @@ table, th, td{
   text-align: center;
 }
 
-.button{
+.button a{
   margin-top: 7px;
   font-size: 1.2em;
+  color: #009cd4!important;
 }
+/*SKill Creator*/
+
 
 /********** Large devices only **********/
 @media (min-width: 1200px) {}

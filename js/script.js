@@ -69,6 +69,7 @@ $ajaxUtils.sendGetRequest(
 });
 
 lb.contctUs = function(){
+  switchMenuToActive(0);
   window.open('mailto:sleepy.cookie.studios@gmail.com?Subject=WANDA%20is%20Awesome');
 }
 // Builds HTML for the home page based on categories array
